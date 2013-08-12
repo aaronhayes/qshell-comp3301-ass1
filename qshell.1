@@ -1,0 +1,58 @@
+.TH QSHELL 1 "AUGUST 2013" GNU "User Manuals"
+.SH NAME
+qshell 
+.SH SYNOPSIS
+.B /path/qshell [file]
+
+.SH DESCRIPTION
+Qshell is a command interpreter that excutes commands read from the 
+standard input. Qshell has three built in, native, commands and
+incorporates functions from other shells.
+
+.SH OPTIONS
+Qshell takes no arguments or options.
+
+.SH EXIT STATUS
+.B Qshell, itself, will exit with a a status of 0 on success.
+On any failure or error, it will exit with a status of 1.
+
+The waitpid function returns the exit status of executed commands.
+
+.SH ENVIRONMENT
+Qshell uses the following environment varaibles.
+.TP
+.I PATH
+The exec function uses path to look for commands.
+.TP
+.I HOME
+The built-in qhsell command, cd, uses HOME to change working directory.
+
+.SH FILES
+.TP
+.I qshell.tar.gzip
+The gunzipped tarball containing all the qshell files.
+.TP
+.I makefile
+Makefile to build qshell
+.TP
+.I qshell
+The .B qshell executable
+.TP
+.I qshell.1
+The qshell man-page
+.TP
+.I /dev/null
+Used for standard input redirect in background commands.
+
+.SH NOTES
+
+.SH BUGS
+.TH
+.I Standard Error Redirection
+Standard Error is never redirected. This causes background processes to
+output error messages directly onto the terminal. 
+
+.SH EXAMPLE
+
+.SH SEE ALSO
+

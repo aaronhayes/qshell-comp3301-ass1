@@ -367,7 +367,6 @@ void exec_pipe(Command *c1, Command *c2) {
     pid[0] = fork();
     if(!pid[0]) {
         /* Call Command one */
-        setsid();
         close(STDOUT_FILENO);
         dup2(fd[WRITE], STDOUT_FILENO);
         if (c1->redirectIn) {
@@ -383,7 +382,6 @@ void exec_pipe(Command *c1, Command *c2) {
     pid[1] = fork();
     if(!pid[1]) {
         /* Call Command two */
-        setsid();
         dup2(fd[READ], STDIN_FILENO);
         if (c2->redirectOut) {
             redirect_filestream(STDOUT_FILENO, c2->outFile, 
@@ -435,7 +433,6 @@ void exec(Command *c) {
             exit(EXIT_FAILURE);
             break;
         case 0:
-            setsid();
             /* Child Process - Redirect Stdin/Stdout if required */
             if (c->redirectIn) {
                 redirect_filestream(STDIN_FILENO, c->inFile, O_RDONLY, 

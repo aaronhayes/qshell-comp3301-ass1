@@ -156,13 +156,13 @@ void check_background_tasks(List *l) {
 
 /*
  * Run atexit of qshell
- * Wait for background processes to finsh.
+ * Wait for background processes to finish.
  * Cleanup and return resource.
  * exit.
  *
  */
 void cleanup(void) {
-    /* Only free memory/proccess if process is the main qshell process */
+    /* Only free memory/process if process is the main qshell process */
     if (masterpid == getpid()) {
         if(path) {
             free(path);
@@ -178,7 +178,7 @@ void cleanup(void) {
             waitpid(pid[1], NULL, 0);
         }
         
-        /* kill/cleanup background proccesses */
+        /* kill/cleanup background processes */
         if(background_processes) {
             destroy_list(background_processes);
         }
@@ -188,7 +188,7 @@ void cleanup(void) {
 
 
 /*
- * Print prompt for uesr to input command.
+ * Print prompt for user to input command.
  */
 void prompt(void) {
     fflush(stdout);
@@ -360,7 +360,7 @@ void exec_pipe(Command *c1, Command *c2) {
 
     if (pipe(fd)) {
         /* Pipe failed */
-        fprintf(stderr, "An Error has occured, exiting qshell...\n");
+        fprintf(stderr, "An Error has occurred, exiting qshell...\n");
         exit(EXIT_FAILURE);
     }
     
@@ -402,14 +402,14 @@ void exec_pipe(Command *c1, Command *c2) {
     
     if ((waitpid(pid[0], &status, 0)) == -1) {
         kill(pid[0], SIGKILL);
-        fprintf(stderr, "An Error has occured, exiting qshell...\n");
+        fprintf(stderr, "An Error has occurred, exiting qshell...\n");
         exit(EXIT_FAILURE);
     }
     pid[0] = 0;
 
     if ((waitpid(pid[1], &status, 0)) == -1) {
         kill(pid[1], SIGKILL);
-        fprintf(stderr, "An Error has occured, exiting qshell...\n");
+        fprintf(stderr, "An Error has occurred, exiting qshell...\n");
         exit(EXIT_FAILURE);
     }
     pid[1] = 0;
@@ -424,14 +424,14 @@ void exec(Command *c) {
     
     if (pipe(fd)) {
         /* Pipe failed */
-        fprintf(stderr, "An Error has occured, exiting qshell...\n");
+        fprintf(stderr, "An Error has occurred, exiting qshell...\n");
         exit(EXIT_FAILURE);
     }
     
     pid[0] = fork();
     switch (pid[0]) {
         case -1:
-            fprintf(stderr, "An Error has occured, exiting qshell...\n");
+            fprintf(stderr, "An Error has occurred, exiting qshell...\n");
             exit(EXIT_FAILURE);
             break;
         case 0:
@@ -458,7 +458,7 @@ void exec(Command *c) {
             close(fd[READ]);
             if ((waitpid(pid[0], &exitStat, 0)) == -1) {
                 kill(pid[0], SIGKILL);
-                fprintf(stderr, "An Error has occured, exiting qshell...\n");
+                fprintf(stderr, "An Error has occurred, exiting qshell...\n");
                 exit(EXIT_FAILURE);
             }
             pid[0]  = 0;
@@ -475,7 +475,7 @@ void exec_background(Command *c) {
     pid_t pidbg;
     if (pipe(fd)) {
         /* Pipe failed */
-        fprintf(stderr, "An Error has occured, exiting qshell...\n");
+        fprintf(stderr, "An Error has occurred, exiting qshell...\n");
         exit(EXIT_FAILURE);
     }
     
@@ -483,7 +483,7 @@ void exec_background(Command *c) {
     
     switch (pidbg) {
         case -1:
-            fprintf(stderr, "An Error has occured, exiting qshell...\n");
+            fprintf(stderr, "An Error has occurred, exiting qshell...\n");
             exit(EXIT_FAILURE);
             break;
         case 0:
@@ -513,7 +513,7 @@ void exec_background(Command *c) {
             fprintf(stderr, "-qshell: %s: command not found\n", c->args[0]);
             exit(EXIT_FAILURE);
         default:
-            /* Parent Process - Check if an error has occured */
+            /* Parent Process - Check if an error has occurred */
             close(fd[WRITE]);
             fprintf(stdout, "[%d] %d\n", ++background_processes->count, pidbg);
             track_process(background_processes, pidbg, fd[READ], fd[WRITE]);
@@ -521,7 +521,7 @@ void exec_background(Command *c) {
 }
 
 /*
- *
+ * Correctly run command type
  */
 void run_commands(Set* s) {
     if (s->background) {
@@ -536,7 +536,7 @@ void run_commands(Set* s) {
 } 
 
 /*
- * Built in comand for exit.
+ * Built in command for exit.
  * Exit qshell
  */
 void ex(void) {

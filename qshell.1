@@ -5,21 +5,26 @@ qshell
 .B /path/qshell [file]
 
 .SH DESCRIPTION
-Qshell is a command interpreter that excutes commands read from the 
-standard input. Qshell has three built in, native, commands and
+qshell is a command interpreter that executes commands read from the
+standard input. qshell has three built in, native, commands and
 incorporates functions from other shells.
 
 .SH OPTIONS
-Qshell takes no arguments or options.
+qshell takes no arguments or options.
+
+.SH ARGUMENTS
+If an argument is provided after the qshell command, it is assumed to
+be a file name containing shell commands. qshell will read these commands,
+without printing the prompt to the user.
 
 .SH EXIT STATUS
-.B Qshell, itself, will exit with a a status of 0 on success.
+.B qshell, itself, will exit with a a status of 0 on success.
 On any failure or error, it will exit with a status of 1.
 
 The waitpid function returns the exit status of executed commands.
 
 .SH ENVIRONMENT
-Qshell uses the following environment varaibles.
+qshell uses the following environment variables.
 .TP
 .I PATH
 The exec function uses path to look for commands.

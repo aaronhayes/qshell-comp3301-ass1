@@ -1,8 +1,11 @@
-.TH QSHELL 1 "AUGUST 2013" GNU "User Manuals"
+.TH QSHELL 1 "AUGUST 2013" GNU "qshell User Manuals"
+
 .SH NAME
-qshell 
+qshell - a simple shell
+
 .SH SYNOPSIS
-.B /path/qshell [file]
+.B /path/to/qshell
+.RB [file]
 
 .SH DESCRIPTION
 qshell is a command interpreter that executes commands read from the
@@ -10,7 +13,7 @@ standard input. qshell has three built in, native, commands and
 incorporates functions from other shells.
 
 .SH OPTIONS
-qshell takes no arguments or options.
+qshell does not take any options. However, a filename can be supplied.
 
 .SH ARGUMENTS
 If an argument is provided after the qshell command, it is assumed to
@@ -18,10 +21,12 @@ be a file name containing shell commands. qshell will read these commands,
 without printing the prompt to the user.
 
 .SH EXIT STATUS
-.B qshell, itself, will exit with a a status of 0 on success.
+qshell, itself, will exit with a a status of 0 on success.
 On any failure or error, it will exit with a status of 1.
 
-The waitpid function returns the exit status of executed commands.
+The
+.BR waitpid(2)
+function returns the exit status of executed commands.
 
 .SH ENVIRONMENT
 qshell uses the following environment variables.
@@ -41,7 +46,7 @@ The gunzipped tarball containing all the qshell files.
 Makefile to build qshell
 .TP
 .I qshell
-The .B qshell executable
+The qshell executable
 .TP
 .I qshell.1
 The qshell man-page
@@ -50,14 +55,22 @@ The qshell man-page
 Used for standard input redirect in background commands.
 
 .SH NOTES
+Functionality and behaviour was modeled of the bash shell if the assignment
+specifications did not provide a full description or outline.
 
 .SH BUGS
-.TH
-.I Standard Error Redirection
+.TP
+.I "Standard Error Redirection"
 Standard Error is never redirected. This causes background processes to
 output error messages directly onto the terminal. 
 
 .SH EXAMPLE
+To run a file, called filetest, that contains shell commands. If both the
+qshell executable and filetes are in the current directory.
+The command would be: ./qshell filetest
 
 .SH SEE ALSO
+.BR bash(1)
 
+.SH AUTHOR
+Aaron Hayes (42338468) <aaron.hayes@uqconnect.edu.au>

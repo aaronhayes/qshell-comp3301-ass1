@@ -36,13 +36,11 @@ typedef struct node {
     int fd[2];
     struct node *next;
     int active;
-    int num;
 } Node;
 
 typedef struct list {
     Node *head;
     Node *tail;
-    int count;
 } List;
 
 typedef struct cmd {
@@ -97,7 +95,6 @@ void destroy_list(List *l) {
 List* create_list(void) {
     List *l = malloc(sizeof(List));
     l->head = l->tail = 0;
-    l->count = 0;
     return l;
 }
 
@@ -111,7 +108,6 @@ void track_process(List * l, pid_t pid, int read, int write) {
     new->pid = pid;
     new->fd[READ] = read;
     new->fd[WRITE] = write;
-    new->num = l->count;
     
     if (l->head == 0) {    
         /* list was empty */
@@ -125,6 +121,7 @@ void track_process(List * l, pid_t pid, int read, int write) {
 
 /*
  * Check for completed background tasks
+ *  Read and display output if required
  */
 void check_background_tasks(List *l) {
     int status;
@@ -133,9 +130,10 @@ void check_background_tasks(List *l) {
     
     while (n != 0) {
         if(n->active) {
-            /* Process was still running at last check, 
+            /* Process was still running at last check,
                 check if it has finished */
             if(waitpid(n->pid, &status, WNOHANG) > 0) {
+                fprintf(stdout, "[%d] Status %d\n", n->pid, WEXITSTATUS(status));
                 n->active = 0;
                 close(n->fd[WRITE]);
                 FILE *in = fdopen(n->fd[READ], "r");
@@ -145,8 +143,6 @@ void check_background_tasks(List *l) {
                 fflush(stdout);
                 close(n->fd[READ]);
                 fclose(in);
-                fprintf(stdout, "[%d] (%d) Exited with status = %d\n", 
-                    n->num, n->pid, WEXITSTATUS(status));
             }
         }
         n = n->next;
@@ -205,7 +201,7 @@ void prompt(void) {
 }
 
 /*
- * Signal Handler
+ * Signal Handler for SIGINT
  */
 void sig_interrupt(int s) {
     int x = 0;
@@ -451,7 +447,7 @@ void exec(Command *c) {
             fprintf(stderr, "-qshell: %s: command not found\n", c->args[0]);
             exit(EXIT_FAILURE);
         default:
-            /* Parent Process - Check if an error has occured */
+            /* Parent Process - Check if an error has occurred */
             close(fd[READ]);
             if ((waitpid(pid[0], &exitStat, 0)) == -1) {
                 kill(pid[0], SIGKILL);
@@ -512,7 +508,7 @@ void exec_background(Command *c) {
         default:
             /* Parent Process - Check if an error has occurred */
             close(fd[WRITE]);
-            fprintf(stdout, "[%d] %d\n", ++background_processes->count, pidbg);
+            fprintf(stdout, "[%d]\n", pidbg);
             track_process(background_processes, pidbg, fd[READ], fd[WRITE]);
     }
 }
@@ -541,7 +537,7 @@ void ex(void) {
 }
 
 /*
- * Built in comand for cd
+ * Built in command for cd
  * Change user's working dir
  */
 void cd(char *dir) {
@@ -633,7 +629,7 @@ int main (int argc, char *argv[]) {
     sa.sa_handler = sig_interrupt;
     sa.sa_flags = SA_RESTART;
     sigaction(SIGINT, &sa, 0);
-    /*signal(SIGINT, sig_interrupt);*/
+
     if (argc == 2) {
         /* Read from file instead of standard in, don't display prompt */
         redirect_filestream(STDIN_FILENO, argv[1], O_RDONLY, 0, "qshell Input");

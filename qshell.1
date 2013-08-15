@@ -58,6 +58,11 @@ Used for standard input redirect in background commands.
 Functionality and behaviour was modeled of the bash shell if the assignment
 specifications did not provide a full description or outline.
 
+Stdout for background tasks is printed after the task has finished and
+before the next prompt is printed.
+
+On exit all background tasks are stopped and cleaned up.
+
 .SH BUGS
 .TP
 .I "Standard Error Redirection"
@@ -70,7 +75,8 @@ qshell executable and filetes are in the current directory.
 The command would be: ./qshell filetest
 
 .SH SEE ALSO
-.BR bash(1)
+.BR bash(1),
+.BR waitpid(2)
 
 .SH AUTHOR
 Aaron Hayes (42338468) <aaron.hayes@uqconnect.edu.au>

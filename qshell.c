@@ -560,6 +560,7 @@ int check_set(Set *s) {
     if (s->argc > 20) {
         return 1;
     }
+    if (s->background && s->piping) return 1;
     return 0;
 }
 
